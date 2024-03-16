@@ -29,8 +29,59 @@ size_t Size(void* ptr)
 
 // implement merge sort
 // extraMemoryAllocated counts bytes of extra memory allocated
-void mergeSort(int pData[], int l, int r)
+void mergeSort(int pData[], int l, int r) 
 {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(pData, l, m);
+        mergeSort(pData, m + 1, r);
+
+        int n1 = m - l + 1;
+        int n2 = r - m;
+        int* L = (int*)Alloc(n1 * sizeof(int));
+        int* R = (int*)Alloc(n2 * sizeof(int));
+
+		memcpy(L, &pData[l], n1 * sizeof(int));
+        memcpy(R, &pData[m + 1], n2 * sizeof(int));
+		
+		
+		int i = 0;
+		int j = 0;
+		int k = l;
+
+        while (i < n1 && j < n2) 
+		{
+            if (L[i] <= R[j]) 
+			{
+                pData[k] = L[i];
+                i++;
+            }
+            else 
+			{
+                pData[k] = R[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1) 
+		{
+            pData[k] = L[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) 
+		{
+            pData[k] = R[j];
+            j++;
+            k++;
+        }
+
+        DeAlloc(L);
+        DeAlloc(R);
+
+    }
 }
 
 // parses input file to an integer array
